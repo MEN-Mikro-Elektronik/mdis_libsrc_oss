@@ -5,7 +5,8 @@
 
 PROJECT_NAME           = "OSS module for Linux/RTAI"
 INPUT                  = ../ \
-                         $(MEN_COM_INC)/MEN/oss.h
+                         $(MEN_COM_INC)/MEN/oss.h \
+                         ../COM
 
 OUTPUT_DIRECTORY       = .
 EXTRACT_ALL            = NO
