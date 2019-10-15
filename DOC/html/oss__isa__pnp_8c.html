@@ -34,9 +34,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 ISA PNP support. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2005/07/07 17:17:20 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.3 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <dl compact><dt><b>Preprocessor Switches:</b></dt><dd><ul>
 <li></li></ul>
@@ -121,8 +119,21 @@ ISA PNP support.
 <p>
 Get ISAPNP configuration data. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>not implemented. Returns <code>ERR_OSS_ISA_NO_PNPDATA</code> </dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>add full documentation. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>cardVendId</em>&nbsp;</td><td><b>IN</b> card vendor id (3 characters) </td></tr>
+    <tr><td valign=top><em>cardProdId</em>&nbsp;</td><td><b>IN</b> card product number (4 hex digits) </td></tr>
+    <tr><td valign=top><em>devVendId</em>&nbsp;</td><td><b>IN</b> device vendor id (3 characters) </td></tr>
+    <tr><td valign=top><em>devProdId</em>&nbsp;</td><td><b>IN</b> device product number (4 hex digit) </td></tr>
+    <tr><td valign=top><em>devNbr</em>&nbsp;</td><td><b>IN</b> device number (decimal 0..9) </td></tr>
+    <tr><td valign=top><em>resType</em>&nbsp;</td><td><b>IN</b> resource type (OSS_ISA_...) </td></tr>
+    <tr><td valign=top><em>resNbr</em>&nbsp;</td><td><b>IN</b> resource number (decimal 0..9) </td></tr>
+    <tr><td valign=top><em>valueP</em>&nbsp;</td><td><b>OUT</b> output value</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>not implemented. Returns <code>ERR_OSS_ISA_NO_PNPDATA</code> </dd></dl>
     </td>
@@ -135,8 +146,7 @@ Get ISAPNP configuration data.
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

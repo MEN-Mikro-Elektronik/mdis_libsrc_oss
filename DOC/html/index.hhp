@@ -31,6 +31,7 @@ oss__mem_8c.html
 oss__resource_8c.html
 oss__sem_8c.html
 oss__sig_8c.html
+oss__specification_8c.html
 oss__spinlock_8c.html
 oss__swap_8c.html
 oss__task_8c.html
@@ -47,6 +48,13 @@ ossu__time_8c.html
 linossalarmusage.html
 linsemusage.html
 linsigusage.html
+osscommonspec.html
+ossalarmusage.html
+ossdllusage.html
+osssemusage.html
+osssigusage.html
+deprecated.html
+todo.html
 globals.html
 globals_func.html
 globals_defs.html

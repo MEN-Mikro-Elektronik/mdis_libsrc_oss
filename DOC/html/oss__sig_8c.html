@@ -32,7 +32,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create signal handle. </em> <a href="#a1"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int32&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="oss__sig_8c.html#a2">OSS_SigRemove</a> (OSS_HANDLE *oss, OSS_SIG_HANDLE **sigP)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy semaphore handle. </em> <a href="#a2"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy signal handle. </em> <a href="#a2"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int32&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="oss__sig_8c.html#a3">OSS_SigSend</a> (OSS_HANDLE *oss, OSS_SIG_HANDLE *sig)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send signal to a process. </em> <a href="#a3"></a><em><br><br></td></tr>
@@ -43,9 +43,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Signal routines. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2010/04/14 10:06:41 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.11 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a name="a1" doxytag="oss_sig.c::OSS_SigCreate"></a><p>
@@ -91,9 +89,17 @@ Signal routines.
 <p>
 Create signal handle. 
 <p>
-<p>
-See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a145">OSS_SigRemove</a>, <a class="el" href="oss_8h.html#a144">OSS_SigSend</a></dd></dl>
+This creates an OS specific handle to store an identifier for the calling task. To send the signal, use <a class="el" href="oss__sig_8c.html#a3">OSS_SigSend()</a>.<p>
+This routine must be called in the context of the process/task that wishes to receive the signal.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Don't use in IRQ or Alarm routines.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>signal</em>&nbsp;</td><td><b>IN</b> signal code to install </td></tr>
+    <tr><td valign=top><em>sigP</em>&nbsp;</td><td><b>OUT</b> will receive created signal handle. Must be passed to further OSS_SigXXX() routines.</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__sig_8c.html#a2">OSS_SigRemove</a>, <a class="el" href="oss__sig_8c.html#a3">OSS_SigSend</a> </dd></dl>
@@ -149,6 +155,15 @@ See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS sig
 <p>
 Get info about signal. 
 <p>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>Don't use it. Not all OSes have a process ID.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>sig</em>&nbsp;</td><td><b>IN</b> signal handle, returned by <a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate()</a> </td></tr>
+    <tr><td valign=top><em>signalP</em>&nbsp;</td><td><b>OUT</b> signal code </td></tr>
+    <tr><td valign=top><em>pidP</em>&nbsp;</td><td><b>OUT</b> process id</td></tr>
+  </table>
+</dl>
      </td>
   </tr>
 </table>
@@ -187,11 +202,17 @@ Get info about signal.
     <td>
 
 <p>
-Destroy semaphore handle. 
+Destroy signal handle. 
 <p>
-<p>
-See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a143">OSS_SigCreate</a>, <a class="el" href="oss_8h.html#a144">OSS_SigSend</a></dd></dl>
+Frees all resources allocated by <a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate()</a>. The function fails if the calling process id is not equal to the installing process.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Don't use in IRQ or Alarm routines.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>sigP</em>&nbsp;</td><td><b>IN</b> pointer to signal handle to remove <b>OUT</b> *sigP set to NULL</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate</a>, <a class="el" href="oss__sig_8c.html#a3">OSS_SigSend</a> </dd></dl>
@@ -235,9 +256,14 @@ See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS sig
 <p>
 Send signal to a process. 
 <p>
-<p>
-See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a143">OSS_SigCreate</a>, <a class="el" href="oss_8h.html#a145">OSS_SigRemove</a></dd></dl>
+Sends the signal previously created by <a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate()</a> to the process that called <a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate()</a>.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>sig</em>&nbsp;</td><td><b>IN</b> signal handle, returned by <a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS signals</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__sig_8c.html#a1">OSS_SigCreate</a>, <a class="el" href="oss__sig_8c.html#a2">OSS_SigRemove</a> </dd></dl>
@@ -251,8 +277,7 @@ See <a class="el" href="linsigusage.html#linsigusagesect">Linux notes to OSS sig
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

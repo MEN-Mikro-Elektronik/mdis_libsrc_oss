@@ -49,9 +49,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Alarm routines. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2005/07/07 17:16:58 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.6 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a name="a5" doxytag="oss_alarm.c::OSS_AlarmClear"></a><p>
@@ -91,9 +89,16 @@ Alarm routines.
 <p>
 Deactivate an installed alarm routine. 
 <p>
-<p>
-See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a169">OSS_AlarmCreate</a>, <a class="el" href="oss_8h.html#a170">OSS_AlarmRemove</a>, <a class="el" href="oss_8h.html#a171">OSS_AlarmSet</a></dd></dl>
+This routine deactivates an alarm previously activated with <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet()</a>. Can be used to shut down a cyclic alarm or an alarm in single mode if not yet fired.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>alarmP</em>&nbsp;</td><td><b>IN</b> alarm handle, returned by <a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate()</a></td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error:<ul>
+<li><code>ERR_OSS_ALARM_CLR</code> - if alarm not active</li></ul>
+</dd></dl>
 <p>
 See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate</a>, <a class="el" href="oss__alarm_8c.html#a3">OSS_AlarmRemove</a>, <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet</a> </dd></dl>
@@ -149,9 +154,21 @@ See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes 
 <p>
 Create an alarm. 
 <p>
-<p>
-See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a170">OSS_AlarmRemove</a>, <a class="el" href="oss_8h.html#a171">OSS_AlarmSet</a>, <a class="el" href="oss_8h.html#a172">OSS_AlarmClear</a></dd></dl>
+Creates the alarm handle, but does not trigger the alarm. To start the cyclic or one-shot alarm, use <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet()</a>.<p>
+Function <em>funct</em> is installed as alarm routine, which can be activated by a subsequent <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet()</a> call:<p>
+<div class="fragment"><pre> <span class="keywordtype">void</span> funct(<span class="keywordtype">void</span> *arg)
+</pre></div><p>
+Argument <em>arg</em> is passed to the alarm routine.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Don't use in IRQ or Alarm routines.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>funct</em>&nbsp;</td><td><b>IN</b> function to be called when alarm is fired </td></tr>
+    <tr><td valign=top><em>arg</em>&nbsp;</td><td><b>IN</b> argument to pass to <em>func</em> </td></tr>
+    <tr><td valign=top><em>alarmP</em>&nbsp;</td><td><b>OUT</b> will receive created alarm handle. Must be passed to further OSS_AlarmXXX() routines.</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a3">OSS_AlarmRemove</a>, <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet</a>, <a class="el" href="oss__alarm_8c.html#a5">OSS_AlarmClear</a> </dd></dl>
@@ -186,9 +203,23 @@ See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes 
 <p>
 Mask alarms. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>all</b> processor interrupts</dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a7">OSS_AlarmRestore()</a></dd></dl>
+This routine temporarily masks <b>all</b> alarms to occur until <a class="el" href="oss__alarm_8c.html#a7">OSS_AlarmRestore()</a> is called. On most platforms, this routine does essentially the same as <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a>.<p>
+The return value of <a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a> is the system's (alarm) state before <a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a> has been called. <code>OSS_ALARM_STATE</code> is a system specific type that reflects if alarms are masked (or not). The returned value has to be passed to <a class="el" href="oss__alarm_8c.html#a7">OSS_AlarmRestore()</a>.<p>
+Example alarm masking: <div class="fragment"><pre>  OSS_ALARM_STATE almState;
+
+  almState = <a class="code" href="oss__alarm_8c.html#a6">OSS_AlarmMask</a>( osh );
+
+  <span class="comment">// critical code here</span>
+
+  <a class="code" href="oss__alarm_8c.html#a7">OSS_AlarmRestore</a>( osh, almState );  
+</pre></div><p>
+<dl compact><dt><b>Remarks:</b></dt><dd>This function has been added in MDIS4/2003</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>reflects alarm enabled state before alarm is masked.</dd></dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>all</b> processor interrupts</dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a7">OSS_AlarmRestore()</a> </dd></dl>
@@ -232,9 +263,15 @@ Mask alarms.
 <p>
 Destroys alarm handle. 
 <p>
-<p>
-See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a169">OSS_AlarmCreate</a>, <a class="el" href="oss_8h.html#a171">OSS_AlarmSet</a>, <a class="el" href="oss_8h.html#a172">OSS_AlarmClear</a></dd></dl>
+Frees all resources allocated by <a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate()</a>. The alarm is automatically deactivated if it was pending.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Don't use in IRQ or Alarm routines.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>alarmP</em>&nbsp;</td><td><b>IN</b> pointer to alarm handle to remove <b>OUT</b> *alarmP set to NULL</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate</a>, <a class="el" href="oss__alarm_8c.html#a4">OSS_AlarmSet</a>, <a class="el" href="oss__alarm_8c.html#a5">OSS_AlarmClear</a> </dd></dl>
@@ -278,8 +315,14 @@ See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes 
 <p>
 Unmask alarms. 
 <p>
-<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a></dd></dl>
+Must be called to restore the alarm enable state to the state before <a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a> has been called.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>This function has been added in MDIS4/2003</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>oldState</em>&nbsp;</td><td><b>IN</b> value returned by <a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a>.</td></tr>
+  </table>
+</dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a6">OSS_AlarmMask()</a> </dd></dl>
     </td>
@@ -340,9 +383,22 @@ Unmask alarms.
 <p>
 Activate an installed alarm routine. 
 <p>
+This routine activates an alarm created with <a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate()</a>.<p>
+The installed alarm routine is is called depending on the <em>cyclic</em> parameter:<ul>
+<li><em>cyclic==1</em>: cyclically with a period of <em>msec</em> </li><li><em>cyclic==0</em>: once after <em>msec</em>.</li></ul>
 <p>
-See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a169">OSS_AlarmCreate</a>, <a class="el" href="oss_8h.html#a170">OSS_AlarmRemove</a>, <a class="el" href="oss_8h.html#a172">OSS_AlarmClear</a></dd></dl>
+Alarm time may be rounded up to the systems minimum ticker resolution. This (rounded) time is retured in <em>*realMsecP</em>.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>The result is undefined if <em>msec</em> is passed as 0.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>alarmP</em>&nbsp;</td><td><b>IN</b> alarm handle, returned by <a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate()</a> </td></tr>
+    <tr><td valign=top><em>msec</em>&nbsp;</td><td><b>IN</b> alarm time in milliseconds </td></tr>
+    <tr><td valign=top><em>cyclic</em>&nbsp;</td><td><b>IN</b> alarm mode: 0=single, 1=cyclic </td></tr>
+    <tr><td valign=top><em>realMsecP</em>&nbsp;</td><td><b>OUT</b> rounded alarm time [msec]</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes to OSS alarms</a> for more info.<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__alarm_8c.html#a2">OSS_AlarmCreate</a>, <a class="el" href="oss__alarm_8c.html#a3">OSS_AlarmRemove</a>, <a class="el" href="oss__alarm_8c.html#a5">OSS_AlarmClear</a> </dd></dl>
@@ -356,8 +412,7 @@ See <a class="el" href="linossalarmusage.html#linossalarmusagesect">Linux notes 
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

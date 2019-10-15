@@ -45,9 +45,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Core functions of the OSS module. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2012/05/14 20:29:47 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>2.16 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a name="a7" doxytag="oss.c::EXPORT_SYMBOL"></a><p>
@@ -110,7 +108,13 @@ Core functions of the OSS module.
 <p>
 Get debug level of OSS instance. 
 <p>
- <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a151">OSS_DbgLevelSet</a></dd></dl>
+gets the debug level of this OSS instance.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>current debug level mask</dd></dl>
  <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8c.html#a68">OSS_DbgLevelSet</a> </dd></dl>
     </td>
   </tr>
@@ -152,7 +156,13 @@ Get debug level of OSS instance.
 <p>
 Set debug level of OSS instance. 
 <p>
- <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a152">OSS_DbgLevelGet</a></dd></dl>
+Sets the debug level of this OSS instance. Has no effect if the module is not compiled with <code>DBG</code> switch set.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>newLevel</em>&nbsp;</td><td><b>IN</b> new debug level mask, a combination of the <code>DBG_xxx</code> constants from <em>MEN/dbg</em>.h, e.g. <code>DBG_ALL</code>, DBG_LEV1...</td></tr>
+  </table>
+</dl>
  <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8c.html#a69">OSS_DbgLevelGet</a> </dd></dl>
     </td>
   </tr>
@@ -254,8 +264,7 @@ Creates an instance of OSS and returns a handle for that instance.<p>
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

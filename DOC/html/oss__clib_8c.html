@@ -58,9 +58,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Substitutes for C library calls. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2007/02/06 17:04:41 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.5 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <dl compact><dt><b>Preprocessor Switches:</b></dt><dd><ul>
 <li></li></ul>
@@ -115,6 +113,15 @@ Substitutes for C library calls.
 <p>
 Copy memory block. 
 <p>
+Subsitute for C standard library call <em>memcpy()</em>.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>size</em>&nbsp;</td><td><b>IN</b> number of bytes to copy </td></tr>
+    <tr><td valign=top><em>src</em>&nbsp;</td><td><b>IN</b> source address </td></tr>
+    <tr><td valign=top><em>dest</em>&nbsp;</td><td><b>IN</b> destination address</td></tr>
+  </table>
+</dl>
      </td>
   </tr>
 </table>
@@ -167,6 +174,15 @@ Copy memory block.
 <p>
 Fill data block with byte value. 
 <p>
+Subsitute for C standard library call <em>memset()</em>.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>size</em>&nbsp;</td><td><b>IN</b> number of bytes to fill </td></tr>
+    <tr><td valign=top><em>adr</em>&nbsp;</td><td><b>IN</b> start address </td></tr>
+    <tr><td valign=top><em>value</em>&nbsp;</td><td><b>IN</b> fill value</td></tr>
+  </table>
+</dl>
      </td>
   </tr>
 </table>
@@ -219,7 +235,17 @@ Fill data block with byte value.
 <p>
 Print to string using variable number of arguments. 
 <p>
- <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a168">OSS_Vsprintf</a></dd></dl>
+Subsitute for C standard library call <em>sprintf()</em>.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Implementations don't need to support floating point formats.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>str</em>&nbsp;</td><td><b>IN</b> destination buffer, will contain formatted string. </td></tr>
+    <tr><td valign=top><em>fmt</em>&nbsp;</td><td><b>IN</b> printf()-like format string </td></tr>
+    <tr><td valign=top><em>...</em>&nbsp;</td><td><b>IN</b> arguments</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>number of characters written to string (excluding \0)</dd></dl>
  <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__clib_8c.html#a7">OSS_Vsprintf</a> </dd></dl>
     </td>
   </tr>
@@ -267,6 +293,19 @@ Print to string using variable number of arguments.
 <p>
 Compare two strings. 
 <p>
+Subsitute for C standard library call <em>strcmp()</em>.<p>
+Compares str1 and str2 lexicographicaly.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>str1</em>&nbsp;</td><td><b>IN</b> pointer to 1st string </td></tr>
+    <tr><td valign=top><em>str2</em>&nbsp;</td><td><b>IN</b> pointer to 2nd string </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd><br>
+<ul>
+<li>0 if equal</li><li>&gt;0 if str1[x] &gt; str2[x] ( first different char )</li><li>&lt;0 if str1[x] &lt; str2[x] ( first different char )</li></ul>
+</dd></dl>
      </td>
   </tr>
 </table>
@@ -313,6 +352,14 @@ Compare two strings.
 <p>
 Copy string. 
 <p>
+Subsitute for C standard library call <em>strcpy()</em>.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>from</em>&nbsp;</td><td><b>IN</b> source string </td></tr>
+    <tr><td valign=top><em>to</em>&nbsp;</td><td><b>IN</b> destination string</td></tr>
+  </table>
+</dl>
      </td>
   </tr>
 </table>
@@ -353,6 +400,13 @@ Copy string.
 <p>
 Get the length of a string. 
 <p>
+Subsitute for C standard library call <em>strlen()</em>.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>string</em>&nbsp;</td><td><b>IN</b> start address of string</td></tr>
+  </table>
+</dl>
      </td>
   </tr>
 </table>
@@ -405,6 +459,20 @@ Get the length of a string.
 <p>
 Compare a limited number of characters of two strings. 
 <p>
+Subsitute for C standard library call <em>strncmp()</em>.<p>
+Compares at most <em>nbrOfBytes</em> characters of str1 and str2 lexicographicaly.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>str1</em>&nbsp;</td><td><b>IN</b> pointer to 1st string </td></tr>
+    <tr><td valign=top><em>str2</em>&nbsp;</td><td><b>IN</b> pointer to 2nd string </td></tr>
+    <tr><td valign=top><em>nbrOfBytes</em>&nbsp;</td><td><b>IN</b> max. number of bytes to compare </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd><br>
+<ul>
+<li>0 if equal</li><li>&gt;0 if str1[x] &gt; str2[x] ( first different char )</li><li>&lt;0 if str1[x] &lt; str2[x] ( first different char )</li></ul>
+</dd></dl>
      </td>
   </tr>
 </table>
@@ -457,6 +525,18 @@ Compare a limited number of characters of two strings.
 <p>
 Break string into tokens. 
 <p>
+Subsitute for C standard library call <em>strtok()</em>, but <a class="el" href="oss__clib_8c.html#a5">OSS_StrTok()</a> is reentrant.<p>
+For the first call, pass <em>*lastP</em> as NULL. In this case, <a class="el" href="oss__clib_8c.html#a5">OSS_StrTok()</a> searches from the beginning of <em>string</em> for the separator string <em>separator</em>. The separator string must be found completely in <em>string</em>.<p>
+If a separator was found, the first char of the separator occurrance within <em>string</em> is replaced by a '\0'. The variable pointed to by <em>*lastP</em> is used to save the search start point within <em>string</em> for the next call.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>string</em>&nbsp;</td><td><b>IN</b> string to break into tokens. Can be NULL for for second and subsequent calls. </td></tr>
+    <tr><td valign=top><em>separator</em>&nbsp;</td><td><b>IN</b> separator string </td></tr>
+    <tr><td valign=top><em>lastP</em>&nbsp;</td><td><b>IN/OUT</b> start of next separator search. Should be passed as NULL for the first call. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>pointer to token or NULL if separator not found</dd></dl>
      </td>
   </tr>
 </table>
@@ -509,7 +589,17 @@ Break string into tokens.
 <p>
 Print to string using <em>va_list</em>. 
 <p>
- <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a167">OSS_Sprintf</a></dd></dl>
+Subsitute for C standard library call <em>vsprintf()</em>.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Implementations don't need to support floating point formats.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>str</em>&nbsp;</td><td><b>IN</b> destination buffer, will contain formatted string. </td></tr>
+    <tr><td valign=top><em>fmt</em>&nbsp;</td><td><b>IN</b> printf()-like format string </td></tr>
+    <tr><td valign=top><em>arg</em>&nbsp;</td><td><b>IN</b> arguments</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>number of characters written to string (excluding \0)</dd></dl>
  <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__clib_8c.html#a6">OSS_Sprintf</a> </dd></dl>
     </td>
   </tr>
@@ -521,8 +611,7 @@ Print to string using <em>va_list</em>.
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

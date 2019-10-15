@@ -22,6 +22,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_resource.c"><param name="Local" value="oss__resource_8c.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_sem.c"><param name="Local" value="oss__sem_8c.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_sig.c"><param name="Local" value="oss__sig_8c.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_specification.c"><param name="Local" value="oss__specification_8c.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_spinlock.c"><param name="Local" value="oss__spinlock_8c.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_swap.c"><param name="Local" value="oss__swap_8c.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="oss_task.c"><param name="Local" value="oss__task_8c.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -42,5 +43,12 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="linossalarmusage"><param name="Local" value="linossalarmusage.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="linsemusage"><param name="Local" value="linsemusage.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="linsigusage"><param name="Local" value="linsigusage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Common OSS specificiation "MDIS4/2003-0""><param name="Local" value="osscommonspec.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Gernal Usage of OSS Alarms"><param name="Local" value="ossalarmusage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Using OSS Double Linked Lists"><param name="Local" value="ossdllusage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Using OSS Semaphores"><param name="Local" value="osssemusage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Using OSS Signals"><param name="Local" value="osssigusage.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Deprecated List"><param name="Local" value="deprecated.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Todo List"><param name="Local" value="todo.html"><param name="ImageNumber" value="11"></OBJECT>
   </UL>
 </UL>

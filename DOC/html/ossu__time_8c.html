@@ -46,9 +46,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Time related routines of the OSS module for user space. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:christian.schuster@men.de">christian.schuster@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2005/07/08 11:33:01 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>2.1 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:christian.schuster@men.de">christian.schuster@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a name="a6" doxytag="ossu_time.c::OSS_Delay"></a><p>
@@ -88,10 +86,17 @@ Time related routines of the OSS module for user space.
 <p>
 Let process sleep for specified time. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>The behaviour of this function depends on the <em>rtMode</em> flag passed to the <a class="el" href="oss_8c.html#a66">OSS_Init()</a> function. Either the standard Linux kernel or RTAI implementation is called. For RTAI implementation, see OSS_RtaiDelay(). </dd></dl>
-<dl compact><dt><b>Linux notes:</b></dt><dd>If a signal occurs during sleep, all signals are masked until sleep has finished. </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a158">OSS_MikroDelay</a></dd></dl>
+Suspends the calling process/task for at least the specified time. Time may be rounded up according to ticker resolution.<p>
+A <em>msec</em> value of &lt;= 0 shall delay the process for the smallest possible time.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>All signals during sleep will be ignored. It does not return before the specified time has elapsed.<p>
+Don't use in IRQ or Alarm routines.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>msec</em>&nbsp;</td><td><b>IN</b> number of milliseconds to delay </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>actual time slept in milliseconds</dd></dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>The timer used has a resolution of aprox 10msec. This means that the delay will be at least between 10 and 20 msec</dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="ossu__time_8c.html#a8">OSS_MikroDelay</a> </dd></dl>
@@ -135,9 +140,15 @@ Let process sleep for specified time.
 <p>
 Delay execution of a process by using a busy-loop. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>The behaviour of this function depends on the <em>rtMode</em> flag passed to the <a class="el" href="oss_8c.html#a66">OSS_Init()</a> function. Either the standard Linux kernel or RTAI implementation is called. For RTAI implementation, see OSS_RtaiMikroDelay(). </dd></dl>
-<dl compact><dt><b>Linux notes:</b></dt><dd><em>udelay()</em> is used.</dd></dl>
+Delays the calling process for <em>at</em> <em>least</em> <em>usec</em> by wasting CPU time in a busy loop. It can be called from interrupt or alarm context.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd><em>usec</em> shall be in range 0..1000 microseconds. <p>
+<a class="el" href="oss__time_8c.html#a2">OSS_MikroDelayInit()</a> must be called before this routine can be used.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>microSec</em>&nbsp;</td><td><b>IN</b> number of microseconds to delay</td></tr>
+  </table>
+</dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="ossu__time_8c.html#a7">OSS_MikroDelayInit</a> </dd></dl>
     </td>
@@ -171,9 +182,14 @@ Delay execution of a process by using a busy-loop.
 <p>
 Initialisation routine for <a class="el" href="ossu__time_8c.html#a8">OSS_MikroDelay()</a>. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>For Linux and RTAI, this is a no-op routine. </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a158">OSS_MikroDelay</a></dd></dl>
+This routine performs any initialisation required to execute <a class="el" href="oss__time_8c.html#a3">OSS_MikroDelay()</a>. For example, it might calibrate a delay loop counter.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>MDIS LL drivers don't need to call this routine. It is done by the MDIS kernel.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>Since we don't have a timer that we can use, we try to measure a loop counter three times. The minimum time is used and then doubled to get at least the required delay.</dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="ossu__time_8c.html#a8">OSS_MikroDelay</a> </dd></dl>
@@ -208,10 +224,14 @@ Initialisation routine for <a class="el" href="ossu__time_8c.html#a8">OSS_MikroD
 <p>
 Get the current system tick. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>The behaviour of this function depends on the <em>rtMode</em> flag passed to the <a class="el" href="oss_8c.html#a66">OSS_Init()</a> function. Either the standard Linux kernel or RTAI implementation is called. For RTAI implementation, see OSS_RtaiTickGet(). </dd></dl>
-<dl compact><dt><b>Linux notes:</b></dt><dd>uses <em>jiffies</em>. </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a154">OSS_TickRateGet</a></dd></dl>
+The OSS tick is a 32 bit value that is incremented at a rate determined by <a class="el" href="oss__time_8c.html#a4">OSS_TickRateGet()</a>. The counter always uses the full 32 bits and wraps from 0xffffffff to 0x00000000.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>If interrupts are masked, the tick may no longer be incremented.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>current system tick value.</dd></dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="ossu__time_8c.html#a9">OSS_TickRateGet</a> </dd></dl>
     </td>
@@ -245,10 +265,14 @@ Get the current system tick.
 <p>
 Get the tick rate. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>The behaviour of this function depends on the <em>rtMode</em> flag passed to the <a class="el" href="oss_8c.html#a66">OSS_Init()</a> function. Either the standard Linux kernel or RTAI implementation is called. For RTAI implementation, see OSS_RtaiTickRateGet(). </dd></dl>
-<dl compact><dt><b>Linux notes:</b></dt><dd>returns kernel macro <em>HZ</em>. </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss_8h.html#a155">OSS_TickGet</a></dd></dl>
+Get the rate at which the OSS tick is incremented in ticks per seconds.<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>this function shall return a value between 50 and 1000000; i.e. 20ms to 1us.</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>tick rate in Hz</dd></dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="ossu__time_8c.html#a10">OSS_TickGet</a> </dd></dl>
     </td>
@@ -261,8 +285,7 @@ Get the tick rate.
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 

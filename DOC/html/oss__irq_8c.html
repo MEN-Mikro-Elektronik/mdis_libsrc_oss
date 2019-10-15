@@ -46,9 +46,7 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Interrupt related routines. 
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2012/04/23 13:51:16 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.9 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:klaus.popp@men.de">klaus.popp@men.de</a></dd></dl>
 <dl compact><dt><b>Project:</b></dt><dd>MDISforLinux </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a name="a7" doxytag="oss_irq.c::OSS_IrqLevelToVector"></a><p>
@@ -100,6 +98,16 @@ Interrupt related routines.
 <p>
 Compute interrupt vector from interrupt number and bus type. 
 <p>
+Used by BBIS handler to translate an interrupt level or interrupt number into an interrupt vector.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>busType</em>&nbsp;</td><td><b>IN</b> <code>OSS_BUSTYPE_xxx</code> </td></tr>
+    <tr><td valign=top><em>irqNbr</em>&nbsp;</td><td><b>IN</b> interrupt number/level to translate </td></tr>
+    <tr><td valign=top><em>vectorP</em>&nbsp;</td><td><b>OUT</b> will contain translated vector</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>0 on success or <code>ERR_OSS_xxx</code> error code on error</dd></dl>
      </td>
   </tr>
 </table>
@@ -140,9 +148,21 @@ Compute interrupt vector from interrupt number and bus type.
 <p>
 Mask device interrupts (old implementation). 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>all</b> processor interrupts</dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a6">OSS_IrqUnMask()</a></dd></dl>
+This routine masks the processor interrupts. Depending on the OS and platform, it masks either all interrupts or only the interrupt level at which the device would interrupt. For example, under OS-9/68k, when the device interrupts at IRQ level 4, <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> would mask IRQ levels 1..4, but level 5..7 interrupts could still occur.<p>
+Other implementations mask all processor interrupts.<p>
+To indicate which interrupt level to mask, this routine uses the <em>irqHandle</em> structure, which is filled typically by an <em>OSS_IrqInit()</em> routine. This routine does not exist on all implementations. If it does not exist, you can pass <code>NULL</code> to <em>irqHandle</em>.<p>
+To re-enable processor interrupts, call <a class="el" href="oss__irq_8c.html#a6">OSS_IrqUnMask()</a>.<p>
+This routine should keep track of the nesting level. If <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> has been called already without calling <a class="el" href="oss__irq_8c.html#a6">OSS_IrqUnMask()</a> in between, it shall ignore the second call.<p>
+For multiprocessor environments spin lock will be released by <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a>.<p>
+With locked interrupts/ spinlocks no system/OSS calls are allowed with the exception of: <a class="el" href="oss__time_8c.html#a3">OSS_MikroDelay()</a> <a class="el" href="oss__clib_8c.html#a0">OSS_MemCopy()</a> <a class="el" href="oss__clib_8c.html#a1">OSS_MemFill()</a><p>
+In general critical sections protected by <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> must be as short as possible.<p>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Due to the nesting problems, this routine shall no longer be used. Use <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> / <a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a> instead. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>irqHandle</em>&nbsp;</td><td><b>IN</b> IRQ handle, returned by OSS_IrqInit() or <code>NULL</code> if no OSS_IrqInit() exists.</td></tr>
+  </table>
+</dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>all</b> processor interrupts</dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a6">OSS_IrqUnMask()</a> </dd></dl>
@@ -186,9 +206,23 @@ Mask device interrupts (old implementation).
 <p>
 Mask device interrupts. 
 <p>
-<p>
-<dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>local</b> processor interrupts. To be SMP safe, interrupt routine must also call OSS_IrqMaskR. <em>irqHandle</em> is not used and may be passed as NULL.</dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a></dd></dl>
+This is the revised version of <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a>.<p>
+This routine masks the processor interrupts. Depending on the OS and platform, it masks either all interrupts or only the interrupt level at which the device would interrupt. For example, under OS-9/68k, when the device interrupts at IRQ level 4, <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> would mask IRQ levels 1..4, but level 5..7 interrupts could still occur.<p>
+Other implementations mask all processor interrupts.<p>
+To indicate which interrupt level to mask, this routine uses the <em>irqHandle</em> structure, which is filled typically by an <em>OSS_IrqInit()</em> routine. This routine does not exist on all implementations. If it does not exist, you can pass <code>NULL</code> to <em>irqHandle</em>.<p>
+To re-enable processor interrupts, call <a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a>.<p>
+The return value of <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> is the system's IRQ state before <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> has been called. <code>OSS_IRQ_STATE</code> is a system specific type that reflects the interrupt state of the system. The returned value has to be passed to <a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a>.<p>
+Implementations must make sure that <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> can be called from any context, include from within interrupt and alarm contexts. Nesting calls to <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a>/OSS_IrqRestore() must be also supported<p>
+For multiprocessor environments spin lock will be taken by <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a>.<p>
+With locked interrupts/ spinlocks no system/OSS calls are allowed with the exception of: <a class="el" href="oss__time_8c.html#a3">OSS_MikroDelay()</a> <a class="el" href="oss__clib_8c.html#a0">OSS_MemCopy()</a> <a class="el" href="oss__clib_8c.html#a1">OSS_MemFill()</a><p>
+In general critical sections protected by <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> must be as short as possible.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>irqHandle</em>&nbsp;</td><td><b>IN</b> IRQ handle, returned by OSS_IrqInit() or <code>NULL</code> if no OSS_IrqInit() exists. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>reflects IRQ state before interrupt is masked.</dd></dl>
 <p>
 <dl compact><dt><b>Linux notes:</b></dt><dd>Masks <b>local</b> processor interrupts. To be SMP safe, interrupt routine must also call OSS_IrqMaskR. <em>irqHandle</em> is not used and may be passed as NULL.</dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a> </dd></dl>
@@ -238,8 +272,15 @@ Mask device interrupts.
 <p>
 Unmask device interrupts. 
 <p>
-<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a></dd></dl>
+Revised version of <a class="el" href="oss__irq_8c.html#a6">OSS_IrqUnMask()</a>.<p>
+Must be called to restore the interrupt flag/level to the state before <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> has been called.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>irqHandle</em>&nbsp;</td><td><b>IN</b> IRQ handle, returned by OSS_IrqInit() or <code>NULL</code> if no OSS_IrqInit() exists. </td></tr>
+    <tr><td valign=top><em>oldState</em>&nbsp;</td><td><b>IN</b> value returned by <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a>.</td></tr>
+  </table>
+</dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> </dd></dl>
     </td>
@@ -282,8 +323,14 @@ Unmask device interrupts.
 <p>
 Unmask device interrupts (old implementation). 
 <p>
-<p>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a></dd></dl>
+Must be called to restore the interrupt flag/level to the state before <a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> has been called.<p>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Due to the nesting problems, this routine shall no longer be used. Use <a class="el" href="oss__irq_8c.html#a3">OSS_IrqMaskR()</a> / <a class="el" href="oss__irq_8c.html#a4">OSS_IrqRestore()</a> instead. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>oss</em>&nbsp;</td><td><b>IN</b> OSS handle, returned by <a class="el" href="oss_8c.html#a66">OSS_Init()</a> </td></tr>
+    <tr><td valign=top><em>irqHandle</em>&nbsp;</td><td><b>IN</b> IRQ handle, returned by OSS_IrqInit() or <code>NULL</code> if no OSS_IrqInit() exists.</td></tr>
+  </table>
+</dl>
 <p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="oss__irq_8c.html#a5">OSS_IrqMask()</a> </dd></dl>
     </td>
@@ -296,8 +343,7 @@ Unmask device interrupts (old implementation).
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for OSS module for Linux/RTAI using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 
