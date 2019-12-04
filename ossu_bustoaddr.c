@@ -150,7 +150,7 @@ int32 OSS_BusToPhysAddr
 			break;
 		}
 
-		*physicalAddrP = (void *)pciDev->base_addr[addrNbr];
+		*physicalAddrP = (void *)(U_INT32_OR_64)pciDev->base_addr[addrNbr];
 		break;
 	}
 #endif /*CONFIG_PCI*/
