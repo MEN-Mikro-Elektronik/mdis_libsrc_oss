@@ -96,7 +96,7 @@ int32 OSS_SigCreate(
 }/*OSS_SigCreate*/
 
 /**********************************************************************/
-/** Destroy semaphore handle.
+/** Destroy signal handle.
  *
  * \copydoc oss_specification.c::OSS_SigRemove()
  *
