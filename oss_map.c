@@ -51,7 +51,11 @@ int32 OSS_MapPhysToVirtAddr(
 
 #ifndef CONFIG_USERMODE
 	if( addrSpace == OSS_ADDRSPACE_MEM ) {
+	#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+		*virtAddrP = ioremap( (unsigned long)physAddr, size );
+	#else
 		*virtAddrP = ioremap_nocache( (unsigned long)physAddr, size );
+	#endif
 		if( *virtAddrP == NULL )
 			error = ERR_OSS_MAP_FAILED;
 	}
