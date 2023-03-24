@@ -88,7 +88,7 @@ int32 OSS_MapPhysToVirtAddr(
 		 		 busType == OSS_BUSTYPE_PCI      ) {
 			/* for I/O no similar mapping exists under linux */
 			*virtAddrP = physAddr;
-			if( iopl(3) != 0) {
+			if( ioperm((unsigned long)physAddr, size, 1) != 0) {
 				DBGWRT_ERR((DBH,"OSS_USR - ERROR:"
 								"iopl failed, root privileges needed\n"
 								"                 IO-mapped memory access"
@@ -147,6 +147,16 @@ int32 OSS_UnMapVirtAddr(
 			unmap_size = pagesize;
 		munmap( (void*)unmap_start, unmap_size );
 	}
+#ifdef OSS_USR_IO_MAPPED_ACC_EN
+	else if( addrSpace == OSS_ADDRSPACE_IO ) {
+		if( ioperm((unsigned long)virtAddrP, size, 0) != 0) {
+					DBGWRT_1((DBH,">> OSS_USR - ERROR:"
+					"ioperm failed, root privileges needed\n"
+                    "                 IO-mapped memory access"
+                    "will not work\n"));
+		}
+	}
+#endif
 	*virtAddrP = NULL;
 	return(ERR_SUCCESS);
 }

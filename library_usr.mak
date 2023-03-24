@@ -31,6 +31,7 @@ MAK_SWITCH= $(SW_PREFIX)MAC_USERSPACE \
 			$(SW_PREFIX)OSS_CONFIG_PCI \
 			$(SW_PREFIX)OSS_CONFIG_VME \
 			$(SW_PREFIX)DBG \
+                        $(SW_PREFIX)OSS_USR_IO_MAPPED_ACC_EN
 
 MAK_INCL=$(MEN_INC_DIR)/men_typs.h    \
          $(MEN_INC_DIR)/../../NATIVE/MEN/vme4l.h       \

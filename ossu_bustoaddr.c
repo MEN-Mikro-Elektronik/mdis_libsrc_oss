@@ -41,6 +41,7 @@
 |  DEFINES & CONST                         |
 +------------------------------------------*/
 #define OSS_PAGE_SIZE 			(sysconf(_SC_PAGESIZE))
+#define IO_MAPPED_FLAG	0x01
 
 /*-----------------------------------------+
 |  GLOBALS                                 |
@@ -150,7 +151,16 @@ int32 OSS_BusToPhysAddr
 			break;
 		}
 
-		*physicalAddrP = (void *)(U_INT32_OR_64)pciDev->base_addr[addrNbr];
+		/**
+		 * pciutils lib codifies the mapping mode in the last bit, setting
+		 * it to 1 if the BAR memory is IO_MAPPED type. In such case, just
+		 * clean such bit to point to the init of the memory region.
+		*/
+		if (pciDev->base_addr[addrNbr] & IO_MAPPED_FLAG) {
+			*physicalAddrP = (void *)((U_INT32_OR_64)pciDev->base_addr[addrNbr] & ~IO_MAPPED_FLAG);
+		} else {
+			*physicalAddrP = (void *)(U_INT32_OR_64)pciDev->base_addr[addrNbr];
+		}
 		break;
 	}
 #endif /*CONFIG_PCI*/
