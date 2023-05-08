@@ -103,7 +103,6 @@ int32 OSS_BusToPhysAddr
 		u_int32  pciDomain   = OSS_DOMAIN_NBR( merged_bus );
 		unsigned int devfn = PCI_DEVFN( pciDevNbr, pciFunction );
 		struct pci_dev *dev;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 		struct pci_bus *bus;
 
 		if( (bus = pci_find_bus( pciDomain, busNbr ) ) == NULL ) {
@@ -111,16 +110,6 @@ int32 OSS_BusToPhysAddr
 			break;
 		}
 		if( (dev = pci_get_slot( bus, devfn )) == NULL ){
-#else
-		if (pciDomain != 0) {
-			DBGWRT_ERR((DBH,"*** OSS_BusToPhysAddr: pci domains not supported in "
-						"kernel versions < 2.6.0!\n"));
-			error = ERR_OSS_PCI_BUS_NOTFOUND;
-			goto BUSTOPHYS_END;
-		}
-
-		if( (dev = pci_find_slot( busNbr, devfn )) == NULL ){
-#endif
 			error = ERR_OSS_PCI_NO_DEVINSLOT;
 			break;
 		}
@@ -210,10 +199,7 @@ int32 OSS_PciGetConfig(
 	int16 idx, access;
 	u_int32	busNbr = OSS_BUS_NBR( mergedBusNbr );
 	u_int32 pciDomain = OSS_DOMAIN_NBR( mergedBusNbr );
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 	struct pci_bus *bus = NULL;
-#endif
 
     DBGWRT_1((DBH,"OSS_PciGetConfig domain %lx bus %lx dev %lx func %lx which %lx\n",
 			  pciDomain, busNbr, pciDevNbr, pciFunction, which));
@@ -225,23 +211,13 @@ int32 OSS_PciGetConfig(
 		goto GETCFG_END;
 		
 	/* pci_find_slot is deprecated and removed from kernel version 2.6.31 */
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 
-    /* look for bus in the given pci domain */                     	
+	/* look for bus in the given pci domain */
 	if( (bus = pci_find_bus( pciDomain, busNbr ) ) == NULL ) {
 			return ERR_OSS_PCI_BUS_NOTFOUND;
 	}
 
 	if( (dev = pci_get_slot( bus, devfn )) == NULL ) {
-
-#else
-	if (pciDomain != 0) {
-		DBGWRT_ERR((DBH,"*** OSS_PciGetConfig: pci domains not supported in "
-					"kernel versions < 2.6.0!\n"));
-		return ERR_OSS_PCI_BUS_NOTFOUND;
-	}
-	if( (dev = pci_find_slot( busNbr, devfn )) == NULL ){
-#endif
 		/* non-existant device */
 		*valueP = 0xffffffff & ((1L<<(access*8))-1);
 		return 0;
@@ -327,30 +303,16 @@ int32 OSS_PciSetConfig(
 	struct pci_dev *dev;
 	u_int32	busNbr = OSS_BUS_NBR( mergedBusNbr );
 	u_int32 pciDomain = OSS_DOMAIN_NBR( mergedBusNbr );
-	
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 	struct pci_bus *bus;
-#endif
 
     DBGWRT_1((DBH,"OSS_PciSetConfig domain %lx bus %lx dev %lx func %lx which %lx\n",
 			  pciDomain, busNbr, pciDevNbr, pciFunction, which));
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 
 	// look for bus in the given pci domain
 	if( (bus = pci_find_bus( pciDomain, busNbr ) ) == NULL ) {
 			return ERR_OSS_PCI_BUS_NOTFOUND;
 	}
 	if( (dev = pci_get_slot( bus, devfn )) == NULL ){
-#else
-	if (pciDomain != 0) {
-		DBGWRT_ERR((DBH,"*** OSS_PciSetConfig: pci domains not supported in "
-					"kernel versions < 2.6.0!\n"));
-		return ERR_OSS_PCI_BUS_NOTFOUND;
-	}
-
-	if( (dev = pci_find_slot( busNbr, devfn )) == NULL ){
-#endif
 		DBGWRT_ERR(( DBH, "*** OSS_PciSetConfig: non-existant device\n"));
 		/* non-existant device */
 		retCode = 1;

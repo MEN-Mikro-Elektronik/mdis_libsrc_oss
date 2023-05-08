@@ -47,9 +47,7 @@
 # include <linux/ioport.h>
 # include <linux/pci.h>
 # include <linux/signal.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
 # include <linux/sched/signal.h>
-#endif
 #else /* Userspace OSS... */
 # include <stdlib.h>
 # include <stdio.h>
@@ -92,21 +90,11 @@ typedef struct {
 #define DBH 				oss->dbh
 
 #ifndef MAC_USERSPACE
-#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,20)
-# define TASK_SIGPENDING 	pending.signal.sig
-#else
-# define TASK_SIGPENDING 	signal.sig
-#endif
+# define TASK_SIGPENDING		pending.signal.sig
 
-#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,20)
-# define TASK_LOCK_SIGNALS(t,flags)	    spin_lock_irqsave(&(t)->sighand->siglock, flags);
+# define TASK_LOCK_SIGNALS(t,flags)	spin_lock_irqsave(&(t)->sighand->siglock, flags);
 # define TASK_UNLOCK_SIGNALS(t,flags)	spin_unlock_irqrestore(&(t)->sighand->siglock, flags);
-# define RECALC_SIGPENDING() 			recalc_sigpending()
-#else
-# define TASK_LOCK_SIGNALS(t,flags)	    spin_lock_irqsave(&(t)->sigmask_lock, flags);
-# define TASK_UNLOCK_SIGNALS(t,flags)	spin_unlock_irqrestore(&(t)->sigmask_lock, flags);
-# define RECALC_SIGPENDING() 			recalc_sigpending(current)
-#endif
+# define RECALC_SIGPENDING()		recalc_sigpending()
 #endif /* !MAC_USERSPACE */
 
 #ifdef MAC_USERSPACE

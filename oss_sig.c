@@ -66,9 +66,7 @@ int32 OSS_SigCreate(
 {
 	OSS_SIG_HANDLE *sig;
 	OSS_IRQ_STATE  irqState;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26)
 	struct pid *pidStruct;
-#endif
 
     DBGWRT_1((DBH,"OSS - OSS_SigCreate: sig=0x%ld pid=%ld\n",
 			  (long)signal,(long)current->pid));
@@ -84,10 +82,8 @@ int32 OSS_SigCreate(
 	sig->pid = current->pid;
 	sig->sig = signal;
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26)
- pidStruct = find_vpid(sig->pid);
- sig->sig_task = pid_task(pidStruct, PIDTYPE_PID);
-#endif
+	pidStruct = find_vpid(sig->pid);
+	sig->sig_task = pid_task(pidStruct, PIDTYPE_PID);
 
 	OSS_IrqRestore( oss, NULL, irqState );
 
@@ -145,11 +141,8 @@ int32 OSS_SigSend(
     DBGWRT_1((DBH,"OSS - OSS_SigSend: sig=%ld pid=%ld\n",
 			  (long)sig->sig,(long)sig->pid));	
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)
-	if (kill_proc( sig->pid, sig->sig, 1 )) {	
-#else
+
 	if ( send_sig(sig->sig, sig->sig_task, 1) ) {
-#endif
 		DBGWRT_ERR((DBH,"*** OSS_SigSend: error sending signal to pid %ld\n",
 					(long)sig->pid ));
 		return ERR_OSS_SIG_SEND;
