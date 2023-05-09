@@ -156,12 +156,7 @@ int oss_pci_slot_devnbrs[MDIS_OSS_BUS_CNT] = { -1, 0xf, 0xe, 0xd, 0xc, 0xb,
 											   0xa, 0x9, -1, -1, -1, -1, -1,
 											   -1, -1, -1 };
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,14)
-MODULE_PARM( oss_pci_slot_devnbrs, "8-16i" );
-#else
 module_param_array(oss_pci_slot_devnbrs, int, &arr_argc, 0664);
-#endif
-
 
 
 u_int32 OSS_dbgLev = OSS_DBG_DEFAULT;
